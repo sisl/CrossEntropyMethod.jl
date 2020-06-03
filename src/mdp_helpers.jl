@@ -1,0 +1,23 @@
+function get_playback_policy(d, s, mdp, backup_policy)
+    logpdfs = [logpdf(d, s, i) for i=1:length(first(s)[2])]
+    PlaybackPolicy(actions(mdp)[s[:a]], logpdfs, backup_policy)
+end
+
+function sample_playback_policy_fn(d, mdp, backup_policy, rng = Random.GLOBAL_RNG)
+    () -> get_playback_policy(d, rand(rng, d), mdp, backup_policy)
+end
+
+function mdp_loss(mdp, backup_policy)
+    function loss(d, s)
+        p = get_playback_policy(d, s, mdp, backup_policy)
+        -simulate(RolloutSimulator(), mdp, p)
+    end
+end
+
+function mdp_weight(mdp)
+    function weight(d, s)
+        exp(logpdf(mdp, actions(mdp)[s[:a]]) - logpdf(d, s))
+    end
+end
+
+
