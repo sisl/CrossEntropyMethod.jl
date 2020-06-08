@@ -80,20 +80,24 @@ function cross_entropy_method(loss::Function,
                              )
     d = deepcopy(d_in)
     for iteration=1:max_iter
-        verbose && println("iteration ", iteration, " of ", max_iter)
-
         # Get samples -> Nxm
         samples = rand(rng, d, N)
 
         # sort the samples by loss and select elite number
         losses = [loss(d, s) for s in samples]
         order = sortperm(losses)
+        losses = losses[order]
         N_elite = losses[end] < elite_thresh ? N : findfirst(losses .> elite_thresh) - 1
         N_elite = min(max(N_elite, min_elite_samples), max_elite_samples)
+
+        verbose && println("iteration ", iteration, " of ", max_iter, " N_elite: ", N_elite)
 
         #update based on elite samples
         elite_samples = samples[order[1:N_elite]]
         weights = [weight_fn(d, s) for s in elite_samples]
+        if all(weights .≈ 0.)
+            println("Warning: all weights are zero")
+        end
         d = fit(d, elite_samples, weights, add_entropy = add_entropy)
     end
     d

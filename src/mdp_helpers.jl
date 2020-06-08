@@ -20,4 +20,10 @@ function mdp_weight(mdp)
     end
 end
 
+function continous_actions_weight(d_true)
+    function weight(d, s)
+        exp(logpdf(d_true, s) - logpdf(d, s))
+    end
+end
+
 
