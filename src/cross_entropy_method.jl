@@ -15,7 +15,7 @@ function Distributions.logpdf(d::Dict{Symbol, Tuple{Sampleable, Int64}}, x)
 end
 
 function Base.rand(rng::AbstractRNG, d::Dict{Symbol, Vector{Sampleable}})
-    Dict(k => rand.(rng, d[k]) for k in keys(d))
+    Dict(k => rand.(Ref(rng), d[k]) for k in keys(d))
 end
 
 function Base.rand(rng::AbstractRNG, d::Dict{Symbol, Tuple{Sampleable, Int64}})
@@ -36,7 +36,8 @@ function Distributions.fit(d::Dict{Symbol, Vector{Sampleable}}, samples, weights
     for s in keys(d)
         dtype = typeof(d[s][1])
         m = length(d[s])
-        new_d[s] = [add_entropy(fit(dtype, [samples[j][s][i] for j=1:N], weights)) for i=1:m]
+        # new_d[s] = [add_entropy(fit(dtype, [samples[j][s][i] for j=1:N], weights)) for i=1:m]
+        new_d[s] = [add_entropy(fit(dtype, hcat([samples[j][s][i] for j=1:N]...), weights)) for i=1:m] # TODO. Handle MvNormal Matrix fitting data.
     end
     d = new_d
 end
@@ -74,17 +75,20 @@ function cross_entropy_method(loss::Function,
                               min_elite_samples = Int64(floor(0.1*N)),
                               max_elite_samples = typemax(Int64),
                               weight_fn = (d,x) -> 1.,
+                              losses_fn = (d,samples) -> [loss(d, s) for s in samples],
                               rng::AbstractRNG = Random.GLOBAL_RNG,
                               verbose = false,
                               add_entropy = (x)->x
                              )
     d = deepcopy(d_in)
-    for iteration=1:max_iter
+    for iteration in 1:max_iter
+        @show iteration
         # Get samples -> Nxm
         samples = rand(rng, d, N)
 
         # sort the samples by loss and select elite number
-        losses = [loss(d, s) for s in samples]
+        # losses = [loss(d, s) for s in samples]
+        losses = losses_fn(d, samples)
         order = sortperm(losses)
         losses = losses[order]
         N_elite = losses[end] < elite_thresh ? N : findfirst(losses .> elite_thresh) - 1
@@ -93,7 +97,11 @@ function cross_entropy_method(loss::Function,
         verbose && println("iteration ", iteration, " of ", max_iter, " N_elite: ", N_elite)
 
         #update based on elite samples
-        elite_samples = samples[order[1:N_elite]]
+        if samples isa Matrix
+            elite_samples = samples[:, order[1:N_elite]]
+        else
+            elite_samples = samples[order[1:N_elite]]
+        end
         weights = [weight_fn(d, s) for s in elite_samples]
         if all(weights .≈ 0.)
             println("Warning: all weights are zero")
