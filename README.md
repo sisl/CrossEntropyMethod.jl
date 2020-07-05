@@ -23,3 +23,4 @@ The main function is `cross_entropy_method` and has the following parameters
 
 
 
+Maintained by Anthony Corso (acorso@stanford.edu)
