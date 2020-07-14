@@ -1,4 +1,6 @@
 # CrossEntropyMethod.jl
+[![Build Status](https://travis-ci.org/sisl/CrossEntropyMethod.jl.svg?branch=master)](https://travis-ci.org/sisl/CrossEntropyMethod.jl) [![Coverage Status](https://coveralls.io/repos/github/sisl/CrossEntropyMethod.jl/badge.svg?branch=master)](https://coveralls.io/github/sisl/CrossEntropyMethod.jl?branch=master) [![codecov](https://codecov.io/gh/sisl/CrossEntropyMethod.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/sisl/CrossEntropyMethod.jl)
+
 This package provides an implementation of the cross entropy method for optimizing multivariate time series distributions.
 Suppose we have a timeseries `X = {x1, ..., xN}` where each `xi` is a vector of dimension `m`. This package provides optimization for two different scenarios:
 1. The time series is sampled IID from a single distribution `p`: `xi ~ p(x)`. In this case, the distribution is represented as a `Dict{Symbol, Tuple{Sampleable, Int64}}`. The dictionary will contain `m` symbols, one for each variable in the series. The `Sampleable` object represents `p` and the integer is the length of the timeseries (`N`)
