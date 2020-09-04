@@ -4,6 +4,7 @@ module CrossEntropyMethod
     using POMDPs
     using POMDPSimulators
     using POMDPPlayback
+    using ProgressMeter
 
     export cross_entropy_method, add_categorical_entropy
     include("cross_entropy_method.jl")
