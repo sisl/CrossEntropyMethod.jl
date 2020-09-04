@@ -38,7 +38,7 @@ function Distributions.fit(d::Dict{Symbol, Vector{Sampleable}}, samples, weights
         m = length(d[s])
         new_d[s] = [add_entropy(fit(dtype, [samples[j][s][i] for j=1:N], weights)) for i=1:m]
     end
-    d = new_d
+    new_d
 end
 
 function Distributions.fit(d::Dict{Symbol, Tuple{Sampleable, Int64}}, samples, weights; add_entropy = (x)->x)
@@ -51,7 +51,7 @@ function Distributions.fit(d::Dict{Symbol, Tuple{Sampleable, Int64}}, samples, w
         all_weights = vcat([fill(weights[j], length(samples[j][s][:])) for j=1:N]...)
         new_d[s] = (add_entropy(fit(dtype, all_samples, all_weights)), m)
     end
-    d = new_d
+    new_d
 end
 
 # Gets a function that adds entropy h to categorical distribution c

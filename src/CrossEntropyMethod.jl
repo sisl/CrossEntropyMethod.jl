@@ -6,6 +6,9 @@ module CrossEntropyMethod
     using POMDPPlayback
     using ProgressMeter
 
+    using POMDPs, POMDPPlayback, POMDPModels, POMDPPolicies, Distributions, Random
+    using Test
+
     export cross_entropy_method, add_categorical_entropy
     include("cross_entropy_method.jl")
 
