@@ -2,6 +2,7 @@ using CrossEntropyMethod
 using Test
 using Distributions
 using Random
+Random.seed!(0)
 
 ## Start by testing the algorithms with vectors of distributions
 # construct a distribution

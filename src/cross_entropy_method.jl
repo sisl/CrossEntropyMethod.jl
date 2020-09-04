@@ -15,7 +15,7 @@ function Distributions.logpdf(d::Dict{Symbol, Tuple{Sampleable, Int64}}, x)
 end
 
 function Base.rand(rng::AbstractRNG, d::Dict{Symbol, Vector{Sampleable}})
-    Dict(k => rand.(rng, d[k]) for k in keys(d))
+    Dict(k => rand.(Ref(rng), d[k]) for k in keys(d))
 end
 
 function Base.rand(rng::AbstractRNG, d::Dict{Symbol, Tuple{Sampleable, Int64}})
@@ -76,10 +76,13 @@ function cross_entropy_method(loss::Function,
                               weight_fn = (d,x) -> 1.,
                               rng::AbstractRNG = Random.GLOBAL_RNG,
                               verbose = false,
+                              show_progress = false,
                               add_entropy = (x)->x
                              )
     d = deepcopy(d_in)
-    for iteration=1:max_iter
+    show_progress ? progress = Progress(max_iter) : nothing
+
+    for iteration in 1:max_iter
         # Get samples -> Nxm
         samples = rand(rng, d, N)
 
@@ -99,6 +102,7 @@ function cross_entropy_method(loss::Function,
             println("Warning: all weights are zero")
         end
         d = fit(d, elite_samples, weights, add_entropy = add_entropy)
+        show_progress && next!(progress)
     end
     d
 end

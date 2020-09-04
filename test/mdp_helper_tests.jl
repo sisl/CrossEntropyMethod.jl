@@ -1,5 +1,10 @@
 using CrossEntropyMethod
-using POMDPs, POMDPPlayback, POMDPModels, POMDPPolicies, Distributions, Random
+using POMDPs
+using POMDPPlayback
+using POMDPModels
+using POMDPPolicies
+using Distributions
+using Random
 using Test
 
 mdp = SimpleGridWorld(tprob = 1)
