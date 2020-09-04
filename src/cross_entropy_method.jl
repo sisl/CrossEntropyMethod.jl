@@ -83,7 +83,6 @@ function cross_entropy_method(loss::Function,
     show_progress ? progress = Progress(max_iter) : nothing
 
     for iteration in 1:max_iter
-        verbose && @show(iteration)
         # Get samples -> Nxm
         samples = rand(rng, d, N)
 
