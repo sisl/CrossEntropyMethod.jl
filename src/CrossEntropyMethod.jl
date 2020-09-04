@@ -12,7 +12,7 @@ module CrossEntropyMethod
         @require POMDPPlayback="9532798a-b2b7-41e0-9ed3-6c6560f8cd4c" begin
             using POMDPs
             using POMDPSimulators
-            # using POMDPPlayback
+            using POMDPPlayback
 
             export mdp_loss, mdp_weight, continous_actions_weight, sample_playback_policy_fn
             include("mdp_helpers.jl")
