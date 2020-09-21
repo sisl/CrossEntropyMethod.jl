@@ -1,6 +1,5 @@
 using CrossEntropyMethod
 using POMDPs
-using POMDPPlayback
 using POMDPModels
 using POMDPPolicies
 using Distributions

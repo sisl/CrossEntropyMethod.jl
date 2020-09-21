@@ -1,9 +1,9 @@
 function get_playback_policy(d, s, mdp, backup_policy)
     logpdfs = [logpdf(d, s, i) for i=1:length(first(s)[2])]
-    PlaybackPolicy(actions(mdp)[s[:a]], logpdfs, backup_policy)
+    PlaybackPolicy([a for a in actions(mdp)[s[:a]]], backup_policy, logpdfs, 1)
 end
 
-function sample_playback_policy_fn(d, mdp, backup_policy, rng = Random.GLOBAL_RNG)
+function sample_playback_policy_fn(d, mdp, backup_policy, rng=Random.GLOBAL_RNG)
     () -> get_playback_policy(d, rand(rng, d), mdp, backup_policy)
 end
 
