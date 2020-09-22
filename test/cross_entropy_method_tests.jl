@@ -44,7 +44,7 @@ new_d = fit(d, elite_samples, ones(length(elite_samples)))
 new_loss = sum([l(d, s) for s in rand(Random.GLOBAL_RNG, new_d, N)])/N
 @test new_loss < avg_loss
 
-d = cross_entropy_method(l, d, max_iter =10, N=1000, min_elite_samples = 100, max_elite_samples = 100, verbose = false)
+d = cross_entropy_method(l, d, max_iter=10, N=1000, min_elite_samples=100, max_elite_samples=100, verbose=false)
 
 new_loss = sum([l(d, s) for s in rand(Random.GLOBAL_RNG, d, N)])/N
 @test new_loss <= 0.02
@@ -85,7 +85,7 @@ new_d = fit(d, elite_samples, ones(length(elite_samples)))
 new_loss = sum([l(d,s) for s in rand(Random.GLOBAL_RNG, new_d, N)])/N
 @test new_loss < avg_loss
 
-d = cross_entropy_method(l, d, max_iter =100, N=1000, min_elite_samples = 100, max_elite_samples = 100, verbose = false)
+d = cross_entropy_method(l, d, max_iter=100, N=1000, min_elite_samples=100, max_elite_samples=100, verbose=false)
 
 new_loss = sum([l(d, s) for s in rand(Random.GLOBAL_RNG, d, N)])/N
 @test new_loss <= 0.01
@@ -96,3 +96,10 @@ d = Dict{Symbol, Tuple{Sampleable, Int64}}(
 s = rand(Random.GLOBAL_RNG, d)
 @test logpdf(d, s) == 0
 
+
+# Test all zero weights
+d = Dict{Symbol, Tuple{Sampleable, Int64}}(
+    :x => (Categorical(5), 3),
+    :y => (Categorical(5), 3)
+)
+cross_entropy_method(l, d, max_iter=1, weight_fn=(d,x)->0.0)

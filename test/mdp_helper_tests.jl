@@ -27,3 +27,6 @@ d_opt = cross_entropy_method(loss, d, max_iter = 10, N=100, weight_fn = weight, 
 d_opt[:a][1].p
 
 
+@test_nowarn sample_playback_policy_fn(d, mdp, backup_policy)()
+
+@test_nowarn continous_actions_weight(d)(d_opt, rand(d))
