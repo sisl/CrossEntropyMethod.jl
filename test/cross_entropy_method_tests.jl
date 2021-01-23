@@ -5,13 +5,13 @@ using Random
 Random.seed!(0)
 
 ## Start by testing the algorithms with vectors of distributions
-# construct a distribution
+# Construct a distribution
 d = Dict{Symbol, Vector{Sampleable}}(
     :x => fill(Categorical(5), 3),
     :y => fill(Normal(0,1), 3)
 )
 
-#construct a loss function
+# Construct a loss function
 function l(d, s)
     x, y = s[:x], s[:y]
     (x[1] >= 3) + (x[2] != 3) + (x[3] <= 3) + (y[1] >= 2) + (y[2] < -0.2) + (y[2] > 0.2) + (y[3] <= 2)
@@ -49,14 +49,14 @@ d = cross_entropy_method(l, d, max_iter=10, N=1000, min_elite_samples=100, max_e
 new_loss = sum([l(d, s) for s in rand(Random.GLOBAL_RNG, d, N)])/N
 @test new_loss <= 0.02
 
-## Now test singular distribution
+# Now test singular distribution
 
 d = Dict{Symbol, Tuple{Sampleable, Int64}}(
     :x => (Categorical(5), 3),
     :y => (Normal(0,1), 3)
 )
 
-#construct a loss function
+# Construct a loss function
 function l(d, s)
     x, y = s[:x], s[:y]
     (x[1] >= 3) + (x[2] >= 3) + (x[3] >= 3) + (y[1] >= 0)
@@ -103,3 +103,20 @@ d = Dict{Symbol, Tuple{Sampleable, Int64}}(
     :y => (Categorical(5), 3)
 )
 cross_entropy_method(l, d, max_iter=1, weight_fn=(d,x)->0.0)
+
+
+# Batch testing
+batch_loss = (d, X) -> begin
+    # Collect each :x sample from the time-series vector X
+    𝐗 = map(Xᵢ->Xᵢ[:x][1], X)
+
+    # Squared loss (minimum at 5)
+    return (𝐗 .- 5) .^ 2
+end
+
+# Initial proposal distribution
+Pₒ = Dict{Symbol, Vector{Sampleable}}(:x => [Normal(0, 10)])
+
+P′ = cross_entropy_method(batch_loss, Pₒ, max_iter=10, batched=true)
+
+@test P′[:x][1].μ ≈ 5.0

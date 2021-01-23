@@ -66,7 +66,7 @@ end
 # This version uses a vector of distributions for sampling
 # N is the number of samples taken
 # m is the length of the vector
-# if batched is set to true, loss function must return an array containing loss values for each sample   
+# if batched is set to true, loss function must return an array containing loss values for each sample
 function cross_entropy_method(loss::Function,
                               d_in;
                               max_iter,
@@ -88,14 +88,14 @@ function cross_entropy_method(loss::Function,
         # Get samples -> Nxm
         samples = rand(rng, d, N)
 
-        # sort the samples by loss and select elite number
+        # Sort the samples by loss and select elite number
         if batched
-            losses = loss(d,samples)
+            losses = loss(d, samples)
             @assert length(losses) == N
         else
-            losses = [loss(d, s) for s in samples]    
+            losses = [loss(d, s) for s in samples]
         end
-        
+
         order = sortperm(losses)
         losses = losses[order]
         N_elite = losses[end] < elite_thresh ? N : findfirst(losses .> elite_thresh) - 1
@@ -103,7 +103,7 @@ function cross_entropy_method(loss::Function,
 
         verbose && println("iteration ", iteration, " of ", max_iter, " N_elite: ", N_elite)
 
-        #update based on elite samples
+        # Update based on elite samples
         elite_samples = samples[order[1:N_elite]]
         weights = [weight_fn(d, s) for s in elite_samples]
         if all(weights .≈ 0.)
