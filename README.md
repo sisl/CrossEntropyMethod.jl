@@ -22,6 +22,7 @@ The main function is `cross_entropy_method` and has the following parameters:
 * `rng::AbstractRNG` - The random number generator used. Default: `Random.GLOBAL_RNG`
 * `verbose` - Whether or not to print progress. Default: `false`
 * `show_progress` - Whether or not to show the progress meter. Default: `false`
+* `batched` - Indicates batched loss evaluation (loss function must return an array containing loss values for each sample). Default: `false`
 * `add_entropy` - A function that transforms the sampling distribution after fitting. Use it to enforce a maximum level of entropy if converging too quickly. Default: `(x)->x`
 
 

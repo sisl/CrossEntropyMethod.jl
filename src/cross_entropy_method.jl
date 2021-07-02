@@ -66,6 +66,7 @@ end
 # This version uses a vector of distributions for sampling
 # N is the number of samples taken
 # m is the length of the vector
+
 # if batched is set to true, loss function must return an array containing loss values for each sample   
 function cross_entropy_method(loss,
                               d_in;
@@ -103,7 +104,7 @@ function cross_entropy_method(loss,
 
         verbose && println("iteration ", iteration, " of ", max_iter, " N_elite: ", N_elite)
 
-        #update based on elite samples
+        # Update based on elite samples
         elite_samples = samples[order[1:N_elite]]
         weights = [weight_fn(d, s) for s in elite_samples]
         if all(weights .≈ 0.)
