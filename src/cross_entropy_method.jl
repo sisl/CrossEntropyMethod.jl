@@ -67,7 +67,7 @@ end
 # N is the number of samples taken
 # m is the length of the vector
 # if batched is set to true, loss function must return an array containing loss values for each sample   
-function cross_entropy_method(loss::Function,
+function cross_entropy_method(loss,
                               d_in;
                               max_iter,
                               N=100,
