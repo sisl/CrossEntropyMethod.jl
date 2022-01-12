@@ -47,7 +47,7 @@ new_loss = sum([l(d, s) for s in rand(Random.GLOBAL_RNG, new_d, N)])/N
 d = cross_entropy_method(l, d, max_iter=10, N=1000, min_elite_samples=100, max_elite_samples=100, verbose=false)
 
 new_loss = sum([l(d, s) for s in rand(Random.GLOBAL_RNG, d, N)])/N
-@test new_loss <= 0.02
+@test new_loss <= 0.03
 
 # Now test singular distribution
 

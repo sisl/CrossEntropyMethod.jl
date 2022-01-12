@@ -1,7 +1,7 @@
 name = "CrossEntropyMethod"
 uuid = "f7e364ee-db6c-46d3-b598-27dc284d9c4d"
 authors = ["Anthony Corso <anthonycorso92@gmail.com>"]
-version = "0.1.0"
+version = "0.1.2"
 
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
@@ -12,7 +12,7 @@ ProgressMeter = "92933f4c-e287-5a05-a399-4b506db050ca"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [compat]
-Distributions = "0.17,0.18,0.19,0.20,0.21,0.22,0.23, 0.24"
+Distributions = "0.17,0.18,0.19,0.20,0.21,0.22,0.23,0.24,0.25"
 POMDPModels = "0.4"
 POMDPPolicies = "0.4"
 POMDPSimulators = "0.3.8"
